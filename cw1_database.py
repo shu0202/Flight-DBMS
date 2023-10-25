@@ -109,6 +109,8 @@ def delete():
     loop = 0
     while (loop != 1) :
         query = ""
+        l_tables = ["pilot","aircraft","flight","aircraftpililot"]
+        l_tablekeys = ["pilotid","aircraftid","flightid","aircraftid"]
         print("List of tables:")
         print("1. Pilot\n2. Aircraft\n3. Flight\n4. AircraftPilot")
         print("Select a table: ", end='')
@@ -127,8 +129,12 @@ def delete():
                 query = "Select * from aircraftpilot"
             queryresult = pd.read_sql_query(query, con, index_col=None)
             print(queryresult.to_string(index=False))
-            print("Type query to delete a record: ")
-            delete_query = input()
+            print("select the record that you want to delete (Please input the primary key): ")
+            p_key = input()
+            if type(p_key) is int:
+                delete_query = "delete from " + l_tables[int(choice)-1] + " where " + l_tablekeys[int(choice)-1] + " = "  + p_key
+            else:
+                delete_query = "delete from " + l_tables[int(choice)-1] + " where " + l_tablekeys[int(choice)-1] + " = "  + "\'" + p_key + "\'"
             if (delete_query != 'back'):
                 if (choice == '1'):
                     query = "Select * from pilot"
@@ -154,6 +160,8 @@ def delete():
 def insert():
     loop = 0
     while (loop != 1) :
+        l_tables = ["pilot","aircraft","flight","aircraftpililot"]
+        query_col = []
         query = ""
         print("List of tables:")
         print("1. Pilot\n2. Aircraft\n3. Flight\n4. AircraftPilot")
@@ -173,9 +181,38 @@ def insert():
                 query = "Select * from aircraftpilot"
             queryresult = pd.read_sql_query(query, con, index_col=None)
             print(queryresult.to_string(index=False))
-            print("Type query to insert: ")
-            update_query = input()
-            if (update_query != 'back'):
+            print_col = cur.execute(query)
+            for i in print_col.description:
+                print("Type the value of",end =" ")
+                print (i[0], end = "")
+                print (":")
+                a = input()
+                try:
+                    a = int(a)
+                except:
+                    a = a
+                query_col.append(a)
+            insert_query = "insert into " + l_tables[int(choice)-1] + " ("
+            for i in range(len(print_col.description)):
+                if i != len(print_col.description) - 1:
+                    insert_query = insert_query + print_col.description[i][0] + ", "
+                else:
+                    insert_query = insert_query + print_col.description[i][0]
+            insert_query = insert_query + ") values (" 
+            for j in range(len(query_col)):
+                a = query_col[j]
+                if (type(a) is int):
+                    if j != len(query_col) - 1:
+                        insert_query = insert_query + str(a) + ", "
+                    else:
+                        insert_query = insert_query + str(a)
+                else:
+                    if j != len(query_col) - 1:
+                        insert_query = insert_query + "\'" + a + "\'" + ", "
+                    else:
+                        insert_query = insert_query + "\'" + a + "\'"
+            insert_query = insert_query + ")"
+            if (insert_query != 'back'):
                 if (choice == '1'):
                     query = "Select * from pilot"
                 elif (choice == '2'):
@@ -184,7 +221,7 @@ def insert():
                     query = "Select * from flight"
                 elif (choice == '4'):
                     query = "Select * from aircraftpilot"
-                cur.execute(update_query)
+                cur.execute(insert_query)
                 os.system("clear")
                 print("Result: ")
                 queryresult = pd.read_sql_query(query, con, index_col=None)
@@ -200,7 +237,11 @@ def insert():
 def update():
     loop = 0
     while (loop != 1) :
+        l_tables = ["pilot","aircraft","flight","aircraftpililot"]
+        l_tablekeys = ["pilotid","aircraftid","flightid","aircraftid"]
         query = ""
+        p_key = ""
+        col = ""
         print("List of tables:")
         print("1. Pilot\n2. Aircraft\n3. Flight\n4. AircraftPilot")
         print("Select which table you want to update: ", end='')
@@ -219,8 +260,21 @@ def update():
                 query = "Select * from aircraftpilot"
             queryresult = pd.read_sql_query(query, con, index_col=None)
             print(queryresult.to_string(index=False))
-            print("Type query to update: ")
-            update_query = input()
+            print("Select the record that you want to update (Please input the primary key):")
+            p_key = input()
+            p_key = str(p_key)
+            print("Select the column that you want to update:")
+            col = input()
+            print("Please type the the new value:")
+            val = input()
+            if (type(val) is int and type(p_key) is int):
+                update_query = "update " + l_tables[int(choice)-1] + " set " + col + " = " + val + " where " + l_tablekeys[int(choice)-1] + " = " + p_key
+            elif (type(val) is str and type(p_key) is int):
+                update_query = "update " + l_tables[int(choice)-1] + " set " + col + " = " + "\'" + val + "\'" + " where " + l_tablekeys[int(choice)-1] + " = " + p_key
+            elif (type(val) is int and type(p_key) is str):
+                update_query = "update " + l_tables[int(choice)-1] + " set " + col + " = " + val + " where " + l_tablekeys[int(choice)-1] + " = " + "\'" + p_key + "\'"
+            elif (type(val) is str and type(p_key) is str):
+                update_query = "update " + l_tables[int(choice)-1] + " set " + col + " = " + "\'" + val + "\'" + " where " + l_tablekeys[int(choice)-1] + " = " + "\'" + p_key + "\'"
             if (update_query != 'back'):
                 if (choice == '1'):
                     query = "Select * from pilot"
