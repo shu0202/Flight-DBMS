@@ -113,6 +113,7 @@ def delete():
         l_tablekeys = ["pilotid","aircraftid","flightid","aircraftid"]
         print("List of tables:")
         print("1. Pilot\n2. Aircraft\n3. Flight\n4. AircraftPilot")
+        print("Type 'back' to go back to main screen")
         print("Select a table: ", end='')
         choice = input()
         try:
