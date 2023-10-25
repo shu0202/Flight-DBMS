@@ -129,6 +129,7 @@ def delete():
                 query = "Select * from aircraftpilot"
             queryresult = pd.read_sql_query(query, con, index_col=None)
             print(queryresult.to_string(index=False))
+            print("Type 'back' to go back to main screen")
             print("select the record that you want to delete (Please input the primary key): ")
             p_key = input()
             if type(p_key) is int:
@@ -165,6 +166,7 @@ def insert():
         query = ""
         print("List of tables:")
         print("1. Pilot\n2. Aircraft\n3. Flight\n4. AircraftPilot")
+        print("Type 'back' to go back to main screen")
         print("Select which table you want to insert record(s): ", end='')
         choice = input()
         try:
@@ -244,6 +246,7 @@ def update():
         col = ""
         print("List of tables:")
         print("1. Pilot\n2. Aircraft\n3. Flight\n4. AircraftPilot")
+        print("Type 'back' to go back to main screen")
         print("Select which table you want to update: ", end='')
         choice = input()
         try:
@@ -300,6 +303,7 @@ def update():
 def select():
     loop = 0
     while (loop != 1) :
+        print("Type 'back' to go back to main screen")
         print("Type the query to choose what you want to search in the records: ")
         query = input()
         try:
@@ -318,6 +322,7 @@ def view():
         query = ""
         print("List of tables:")
         print("1. Pilot\n2. Aircraft\n3. Flight\n4. AircraftPilot")
+        print("Type 'back' to go back to main screen")
         print("Select which table you want to view: ", end='')
         choice = input()
         try:
