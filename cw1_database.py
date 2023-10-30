@@ -109,7 +109,7 @@ def delete():
     loop = 0
     while (loop != 1) :
         query = ""
-        l_tables = ["pilot","aircraft","flight","aircraftpililot"]
+        l_tables = ["pilot","aircraft","flight","aircraftpilot"]
         l_tablekeys = ["pilotid","aircraftid","flightid","aircraftid"]
         print("List of tables:")
         print("1. Pilot\n2. Aircraft\n3. Flight\n4. AircraftPilot")
@@ -162,7 +162,7 @@ def delete():
 def insert():
     loop = 0
     while (loop != 1) :
-        l_tables = ["pilot","aircraft","flight","aircraftpililot"]
+        l_tables = ["pilot","aircraft","flight","aircraftpilot"]
         query_col = []
         query = ""
         print("List of tables:")
@@ -240,7 +240,7 @@ def insert():
 def update():
     loop = 0
     while (loop != 1) :
-        l_tables = ["pilot","aircraft","flight","aircraftpililot"]
+        l_tables = ["pilot","aircraft","flight","aircraftpilot"]
         l_tablekeys = ["pilotid","aircraftid","flightid","aircraftid"]
         query = ""
         p_key = ""
