@@ -13,7 +13,7 @@ ap = 0
 #Check if pilot table exists
 try:
     cur.execute("SELECT * FROM pilot")
-        
+
 except sqlite3.OperationalError:
     p = 1
     cur.execute("create table pilot (pilotid smallint unsigned primary key, firstname varchar(20), surname varchar(20))")
@@ -21,7 +21,7 @@ except sqlite3.OperationalError:
 #Check if aircraft table exists
 try:
     cur.execute("SELECT * FROM aircraft")
-        
+
 except sqlite3.OperationalError:
     a = 1
     cur.execute("create table aircraft (aircraftid smallint unsigned primary key, name varchar(20))")
@@ -29,7 +29,7 @@ except sqlite3.OperationalError:
 #Check if flight table exists
 try:
     cur.execute("SELECT * FROM flight")
-        
+
 except sqlite3.OperationalError:
     f = 1
     cur.execute("create table flight (flightid varchar(20), aircraftid smallint unsigned, destination varchar(20), departure varchar(20), dateofflight date, timeofflight time, FOREIGN KEY(aircraftid) REFERENCES aircraft(aircraftid))")
@@ -37,7 +37,7 @@ except sqlite3.OperationalError:
 #Check if aircraftpilot table exists
 try:
     cur.execute("SELECT * FROM aircraftpilot")
-        
+
 except sqlite3.OperationalError:
     ap = 1
     cur.execute("create table aircraftpilot (aircraftid smallint unsigned, pilotid smallint unsigned, FOREIGN KEY(aircraftid) REFERENCES aircraft(aircraftid),FOREIGN KEY(pilotid) REFERENCES pilot(pilotid))")
@@ -99,7 +99,10 @@ def printmenu():
     print("5. Delete Record")
     for i in range(67):
         print(" ",end="")
-    print("6. Exit")
+    print("6. Sql Query")
+    for i in range(67):
+        print(" ",end="")
+    print("7. Exit")
     for i in range(67):
         print(" ",end="")
     print("Your Choice: ", end="")
@@ -301,6 +304,29 @@ def update():
             print("Please input a valid input")
     return()
 
+def search():
+    loop = 0
+    while (loop != 1) :
+        print("Type 'back' to go back to main screen")
+        print("Type the Flight ID to search: ")
+        flightid = input()
+        querypilot = "select pilot.firstname, pilot.surname from pilot join aircraftpilot on pilot.pilotid = aircraftpilot.pilotid join flight on aircraftpilot.aircraftid = flight.aircraftid where flight.flightid = \'" + flightid + "\'"
+        queryflight = "select * from flight where flightid = \'" + flightid + "\'"
+        try:
+            os.system("clear")
+            if (flightid == 'back'):
+                break
+            print("Flight details:")
+            queryresult = pd.read_sql_query(queryflight, con, index_col=None)
+            print(queryresult.to_string(index=False))
+            print("Pilot details:")
+            queryresult = pd.read_sql_query(querypilot, con, index_col=None)
+            print(queryresult.to_string(index=False))
+
+        except:
+            print("Plese input a valid query")
+    return()
+
 def select():
     loop = 0
     while (loop != 1) :
@@ -355,7 +381,7 @@ while (loop != 1):
     #searching
     if (choice == '2'):
         os.system('clear')
-        select()
+        search()
     #adding
     elif (choice == '3'):
         os.system('clear')
@@ -375,13 +401,16 @@ while (loop != 1):
         os.system('clear')
         view()
     elif (choice == '6'):
+      os.system('clear')
+      select()
+    elif (choice == '7'):
         os.system("clear")
         print("Godbye! Thank you for using Flight DBMS")
         break
 
-    
-    
-        
+
+
+
 
 
 con.close
