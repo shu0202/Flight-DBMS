@@ -102,7 +102,10 @@ def printmenu():
     print("6. Sql Query")
     for i in range(67):
         print(" ",end="")
-    print("7. Exit")
+    print("7. Summary")
+    for i in range(67):
+        print(" ",end="")
+    print("8. Exit")
     for i in range(67):
         print(" ",end="")
     print("Your Choice: ", end="")
@@ -370,6 +373,27 @@ def view():
             print("Please input a valid number")
     return()
 
+def summary():
+    print("Summaries:")
+    cur.execute("select count(*) from flight")
+    result = cur.fetchone()
+    row_count = result[0]
+    print("Number of flights: ",end= "")
+    print(row_count)
+    cur.execute("select count(*) from pilot")
+    result = cur.fetchone()
+    row_count = result[0]
+    print("Number of pilots: ",end= "")
+    print(row_count)
+    cur.execute("select count(*) from aircraft")
+    result = cur.fetchone()
+    row_count = result[0]
+    print("Number of aircrafts: ",end= "")
+    print(row_count)
+    print("Press any key to go back")
+    input()
+    return()    
+
 #Main interface
 loop = 0
 choice = 0
@@ -404,6 +428,9 @@ while (loop != 1):
       os.system('clear')
       select()
     elif (choice == '7'):
+      os.system('clear')
+      summary()
+    elif (choice == '8'):
         os.system("clear")
         print("Godbye! Thank you for using Flight DBMS")
         break
